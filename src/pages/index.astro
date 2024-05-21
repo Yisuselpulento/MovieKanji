@@ -1,68 +1,63 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getAllMovies } from '../services/fetchMovies';
+import { type ApiMoviesType } from '../types/api';
+import CardMovie from '../components/CardMovie.astro'
+import Paginator from '../components/Paginator';
+import CategorySide from '../components/CategorySide.astro';
+
+let allMovies: ApiMoviesType[] = [];
+let movieHeader
+
+try {
+  allMovies = await getAllMovies();
+  movieHeader = allMovies[0]
+  console.log(allMovies)
+} catch (error) {
+  console.error('Error fetching movies:', error);
+}
 ---
 
-<Layout title="Welcome to Astro.">
-	<main>
-		<p>Holiii</p>
-	</main>
+<Layout title="KanjiFlix">
+  <section class="flex md:text-start text-center">
+    <div 
+    style=`background-image: url('https://image.tmdb.org/t/p/original${movieHeader?.backdrop_path}')`
+    class="w-full  md:h-[550px] h-[500px] bg-cover bg-no-repeat bg-center absolute opacity-50">
+    </div>
+    <div class="w-full  h-[550px]  bg-gradient-to-t from-black via-transparent to-black relative  flex items-center pl-10 ">
+      <div class="flex flex-col gap-4 p-6 md:items-start">
+        <p class="font-bold text-3xl">{movieHeader.original_title}</p>
+        <p class="max-w-[800px] text-md">{movieHeader.overview}</p>
+        <button class="bg-orange-600 hover:bg-orange-700 py-2 px-4 border-orange-700 text-sm  border">VER PELICULA</button>
+      </div>  
+    </div>
+  </section>
+  <main class="mx-auto md:w-[1600px] w-full p-3 ">
+   
+	<section >
+   
+    <div class="flex md:flex-row flex-col gap-7">
+      <div  class="md:w-[1200px] w-full flex flex-col gap-5 md:items-end md:justify-end items-center justify-center ">
+        <Paginator />
+        <div class="flex flex-wrap gap-5 items-center justify-center ">
+          
+    {allMovies.length > 0 ? (
+      allMovies.map((movie) => (
+       <CardMovie 
+	   title={movie.title}
+	   id={movie.id}
+	   img={movie.poster_path}
+	   lenguage={movie.original_language}
+	   />
+      ))
+    ) : (
+      <p>Loading...</p>
+    )}
+        </div>
+      <Paginator />
+      </div>
+    <CategorySide/>
+    </div> 
+	</section>
+  </main>
 </Layout>
-
-<style>
-	main {
-		margin: auto;
-		padding: 1rem;
-		width: 800px;
-		max-width: calc(100% - 2rem);
-		color: white;
-		font-size: 20px;
-		line-height: 1.6;
-	}
-	.astro-a {
-		position: absolute;
-		top: -32px;
-		left: 50%;
-		transform: translatex(-50%);
-		width: 220px;
-		height: auto;
-		z-index: -1;
-	}
-	h1 {
-		font-size: 4rem;
-		font-weight: 700;
-		line-height: 1;
-		text-align: center;
-		margin-bottom: 1em;
-	}
-	.text-gradient {
-		background-image: var(--accent-gradient);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-size: 400%;
-		background-position: 0%;
-	}
-	.instructions {
-		margin-bottom: 2rem;
-		border: 1px solid rgba(var(--accent-light), 25%);
-		background: linear-gradient(rgba(var(--accent-dark), 66%), rgba(var(--accent-dark), 33%));
-		padding: 1.5rem;
-		border-radius: 8px;
-	}
-	.instructions code {
-		font-size: 0.8em;
-		font-weight: bold;
-		background: rgba(var(--accent-light), 12%);
-		color: rgb(var(--accent-light));
-		border-radius: 4px;
-		padding: 0.3em 0.4em;
-	}
-	.instructions strong {
-		color: rgb(var(--accent-light));
-	}
-	.link-card-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-		gap: 2rem;
-		padding: 0;
-	}
-</style>

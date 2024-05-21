@@ -1,0 +1,23 @@
+---
+import SearchBar from "../components/SearchBar"
+---
+
+<header class="fixed top-0 right-0 h-[50px] flex w-full justify-between p-7 items-center z-50">
+    <img 
+    class="w-[40px] h-[40px] bg-red-700 p-2 rounded-full hidden md:block"
+    src="/MonssterLogoLight.webp" />
+  
+    <div class="flex gap-4 items-center">
+        <nav>
+            <ul class="flex gap-5">
+                <li><a
+                   class="hover:text-orange-600 text-sm"
+                    href="/">Inicio</a></li>
+                    <li><a
+                        class="w-[350px] py-2 px-8 bg-red-500 rounded hover:bg-red-600 text-sm"
+                        href="/">Contactame</a></li>
+            </ul>
+        </nav>
+       <SearchBar client:visible />
+    </div>
+</header>

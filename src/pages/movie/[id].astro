@@ -1,0 +1,51 @@
+---
+import Layout from "../../layouts/Layout.astro"
+import { getAllMovies, getMovieperId } from "../../services/fetchMovies"
+
+const {id} = Astro.params
+
+let movie = null
+
+if (id) {
+    movie = await getMovieperId(id)
+}
+
+
+
+export async function getStaticPaths() {
+    
+ const movies = await getAllMovies()
+
+ return movies.map(mov => ({
+    params: {id: mov.id}
+ }))
+ 
+}
+
+const pathImg = "https://image.tmdb.org/t/p/original"
+---
+
+<Layout title="movie">
+    <section class="flex md:text-start text-center">
+        <div 
+        style=`background-image: url('https://image.tmdb.org/t/p/original${movie?.backdrop_path}')`
+        class="w-full  md:h-[850px] min-h-[900px]  bg-cover bg-no-repeat bg-center absolute opacity-50">
+        </div>
+        <div class="w-full  md:h-[850px] min-h-[900px]  bg-gradient-to-t from-black via-transparent to-black relative flex md:flex-row flex-col items-center pl-10  p-6 ">
+            <img 
+            style={`view-transition-name: image-${id}`}
+            class="md:w-[250px] md:h-[380px] w-[200px] h-[320px] rounded-lg md:mt-0 mt-12"
+            src={`${pathImg}${movie?.poster_path}`} />
+          <div class="flex flex-col gap-4 p-6">
+            <p class="font-bold text-3xl">{movie?.original_title}</p>
+            <p class="max-w-[600px] text-md">{movie?.overview}</p>
+            <div>
+                <button class="py-2 px-4 w-[150px] border border-orange-600 bg-orange-600 hover:bg-orange-700 ">VER PELICULA</button>
+                <button class="py-2 px-4 w-[150px] bg-white text-gray-800 hover:bg-gray-200">TRAILER</button>
+            </div>
+          
+          </div>  
+        </div>
+      </section>
+</Layout>
+

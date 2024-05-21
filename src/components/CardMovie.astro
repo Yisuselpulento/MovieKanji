@@ -1,0 +1,22 @@
+---
+ const {title, img, id} = Astro.props
+
+const pathImg = `https://image.tmdb.org/t/p/original${img}`
+---
+
+<div class="border border-neutral-800 p-1  flex flex-col items-center justify-center text-center rounded-lg gap-2 ">
+    <a 
+    href=`movie/${id}`
+    >
+    <div class="md:w-[210px] md:h-[330px] overflow-hidden rounded-lg ">
+        <img 
+        style={`view-transition-name: image-${id}`}
+           class="md:w-[210px] md:h-[330px] rounded-lg hover:scale-110 transition duration-300"
+           src={pathImg} />
+    </div>
+     </a>
+        <p class="md:text-md text-lg font-bold max-w-[200px] min-h-[50px]">{title}</p>
+    <div class=" w-full justify-end flex">
+        <button class=" py-2 px-10 bg-orange-600 hover:bg-orange-700 w-full m-2">VER</button>
+    </div>
+</div>
